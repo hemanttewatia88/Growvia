@@ -1,8 +1,8 @@
 // DB-backed content accessors (Phase 3 CMS) — Testimonials and Events. Kept out of
 // lib/content.ts deliberately: that module is imported by Client Components (e.g.
-// LiveChatStub calls getSiteInfo()), and pulling in src/lib/db.ts's better-sqlite3
-// dependency there breaks the client bundle. Only import this file from Server
-// Components / route handlers.
+// LiveChatStub calls getSiteInfo()), and pulling in src/lib/db.ts's pg dependency
+// there breaks the client bundle. Only import this file from Server Components /
+// route handlers.
 import { db } from "@/lib/db";
 
 export async function getTestimonials() {

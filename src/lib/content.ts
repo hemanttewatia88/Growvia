@@ -5,7 +5,7 @@
 // getTestimonials/getAggregateRating/getEvents are DB-backed (Phase 3 CMS) and live in
 // ./content-cms.ts instead of here — this file must stay safe to import from Client
 // Components (e.g. LiveChatStub calls getSiteInfo()), and pulling in src/lib/db.ts's
-// better-sqlite3 dependency would break the client bundle.
+// pg dependency (Node-only, uses net/tls/dns) would break the client bundle.
 import { site } from "@/content/site";
 import { verticals } from "@/content/verticals";
 import { tiers, featureMatrix } from "@/content/tiers";

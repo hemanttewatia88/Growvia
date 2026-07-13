@@ -61,10 +61,9 @@ without registering a fresh account. Not a real customer; safe to delete before 
 
 ## Database (`prisma/schema.prisma`, `src/lib/db.ts`)
 
-Local dev uses a SQLite file (`prisma/dev.db`, gitignored) via `@prisma/adapter-better-sqlite3` —
-this does **not** survive serverless/ephemeral deployment filesystems. Swap to
-`@prisma/adapter-pg` + a real Postgres `DATABASE_URL` (a new database, not growvia-web's) before
-deploying — see the `TODO(production)` comment in `src/lib/db.ts`.
+Postgres via `@prisma/adapter-pg` — set `DATABASE_URL` to a real connection string (Neon, Vercel
+Postgres, Supabase, etc. — a dedicated database for this project, not growvia-web's) both locally
+and in Vercel's environment variables. Run `npm run db:push` then `npm run db:seed` against it.
 
 ## Backend seams (not placeholders, but incomplete by design)
 

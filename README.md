@@ -10,8 +10,8 @@ what's stubbed vs. real.
 
 ```bash
 npm install
-cp .env.example .env       # local SQLite DB works out of the box, no real keys needed
-npm run db:push            # create the local SQLite database from prisma/schema.prisma
+cp .env.example .env       # fill in DATABASE_URL with a Postgres connection string
+npm run db:push            # sync prisma/schema.prisma to that database
 npm run db:seed            # seed a demo account (see below)
 npm run dev
 ```
@@ -45,7 +45,8 @@ Copy `.env.example` to `.env` (not `.env.local` — the Prisma CLI only reads `.
 real values before enabling analytics, Search Console verification, real email/SMS delivery, or a
 production Postgres database. Everything works with these unset:
 
-- No `DATABASE_URL` override → local SQLite file at `prisma/dev.db`.
+- `DATABASE_URL` is required — a Postgres connection string (Neon, Vercel Postgres, Supabase, or
+  any standard Postgres instance).
 - No `RESEND_API_KEY` → emails (OTP codes, password resets, welcome, support) log to the console
   instead of sending. In development (`NODE_ENV !== 'production'`) the OTP code and password-reset
   link are also returned directly in the relevant API responses (`devCode` / `devResetUrl`), so the
@@ -56,11 +57,9 @@ production Postgres database. Everything works with these unset:
 ## Structure
 
 - `prisma/schema.prisma` — User/Session/OtpCode/PasswordResetToken/Membership/Invoice/Booking/
-  Message/NotificationPreference models. Status/enum-like fields are plain `String` (not Prisma
-  `enum`, unsupported on SQLite) with TypeScript union types in `src/types/auth.ts` — swapping to
-  Postgres later is a connection-string change, not a schema rewrite.
-- `src/lib/db.ts` — lazy Prisma Client singleton (SQLite via `@prisma/adapter-better-sqlite3`;
-  swap to `@prisma/adapter-pg` + Postgres before deploying, per the TODO comment there).
+  Message/NotificationPreference models (Postgres). Status/enum-like fields are plain `String`
+  (not Prisma `enum`) with TypeScript union types in `src/types/auth.ts`.
+- `src/lib/db.ts` — lazy Prisma Client singleton using `@prisma/adapter-pg`.
 - `src/lib/auth/` — password hashing, token/OTP generation, DB-backed sessions, in-memory rate
   limiting (`TODO`: move to Redis before a multi-instance production deploy).
 - `src/proxy.ts` — Next.js 16's `middleware.ts` replacement; fast cookie-presence check protecting
