@@ -1,0 +1,244 @@
+// Prisma schema — GrowViaSphere customer portal
+// Provider: SQLite for local dev (see prisma.config.ts + src/lib/db.ts).
+// TODO(production): swap to `provider = "postgresql"` + a real DATABASE_URL
+// (e.g. a new Neon project) before deploying. Status/enum-like fields below are
+// deliberately plain String (not Prisma `enum`, unsupported on SQLite) with
+// TypeScript union types + Zod validation in src/lib/validations, so this swap
+// needs no schema changes beyond the datasource provider + connection string.
+//
+// Run `npx prisma db push` to sync schema to the database.
+// Run `npx prisma generate` to regenerate the TypeScript client.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+// ─── Auth ───────────────────────────────────────────────────────────────────
+
+model User {
+  id              String    @id @default(cuid())
+  name            String
+  email           String    @unique
+  phone           String    @unique
+  passwordHash    String? // null = OTP-only account, no password set yet
+  emailVerifiedAt DateTime?
+  phoneVerifiedAt DateTime?
+  consentGivenAt  DateTime? // Privacy Policy / Terms consent at registration (Section 9 compliance)
+  deletionRequestedAt DateTime? // set when the customer requests account deletion (see /api/dashboard/delete-request)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  sessions       Session[]
+  otpCodes       OtpCode[]
+  resetTokens    PasswordResetToken[]
+  membership     Membership?
+  invoices       Invoice[]
+  bookings       Booking[]
+  messages       Message[]
+  notifications  NotificationPreference?
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash String   @unique
+  expiresAt DateTime
+  userAgent String?
+  ipAddress String?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+// purpose: "login" | "register" | "verify_email" | "verify_phone"
+// channel: "email" | "sms"
+model OtpCode {
+  id          String    @id @default(cuid())
+  userId      String?
+  user        User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  destination String
+  channel     String
+  purpose     String
+  codeHash    String
+  attempts    Int       @default(0)
+  expiresAt   DateTime
+  consumedAt  DateTime?
+  createdAt   DateTime  @default(now())
+
+  @@index([destination, purpose])
+}
+
+model PasswordResetToken {
+  id               String    @id @default(cuid())
+  userId           String
+  user             User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash        String    @unique
+  requestedByAdmin Boolean   @default(false)
+  expiresAt        DateTime
+  consumedAt       DateTime?
+  createdAt        DateTime  @default(now())
+
+  @@index([userId])
+}
+
+// ─── Membership & billing ───────────────────────────────────────────────────
+
+// status: "active" | "paused" | "cancelled" | "expired"
+model Membership {
+  id                   String   @id @default(cuid())
+  userId               String   @unique
+  user                 User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tierId               String
+  status               String
+  startedAt            DateTime @default(now())
+  renewalDate          DateTime
+  meetingHoursIncluded Float    @default(0)
+  meetingHoursUsed     Float    @default(0)
+  ptSessionsIncluded   Int      @default(0)
+  ptSessionsUsed       Int      @default(0)
+  guestPassesIncluded  Int      @default(0)
+  guestPassesUsed      Int      @default(0)
+}
+
+// status: "paid" | "pending" | "failed"
+model Invoice {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  amount      Float
+  currency    String   @default("INR")
+  status      String
+  description String
+  issuedAt    DateTime @default(now())
+  receiptUrl  String?
+
+  @@index([userId])
+}
+
+// type: "class" | "meeting-room" | "day-pass"
+// status: "upcoming" | "completed" | "cancelled"
+model Booking {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String
+  label     String
+  startsAt  DateTime
+  endsAt    DateTime
+  status    String
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+// ─── Support ────────────────────────────────────────────────────────────────
+
+// sender: "member" | "staff"
+// channel: "chat" | "email"
+model Message {
+  id                String     @id @default(cuid())
+  userId            String
+  user              User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sender            String
+  channel           String     @default("chat")
+  subject           String?
+  body              String
+  readAt            DateTime?
+  resolvedAt        DateTime?
+  assignedToAdminId String?
+  assignedToAdmin   AdminUser? @relation(fields: [assignedToAdminId], references: [id], onDelete: SetNull)
+  createdAt         DateTime   @default(now())
+
+  @@index([userId])
+  @@index([assignedToAdminId])
+}
+
+model NotificationPreference {
+  id                    String  @id @default(cuid())
+  userId                String  @unique
+  user                  User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  emailBookingReminders Boolean @default(true)
+  emailBilling          Boolean @default(true)
+  emailMarketing        Boolean @default(false)
+  smsBookingReminders   Boolean @default(false)
+}
+
+// ─── Admin portal ───────────────────────────────────────────────────────────
+
+// role: "super_admin" | "support_staff"
+model AdminUser {
+  id                 String   @id @default(cuid())
+  name               String
+  email              String   @unique
+  passwordHash       String
+  role               String
+  mustChangePassword Boolean  @default(true)
+  twoFactorSecret    String?
+  twoFactorEnabled   Boolean  @default(false)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  sessions         AdminSession[]
+  auditLogs        AuditLog[]
+  assignedMessages Message[]
+}
+
+model AdminSession {
+  id        String    @id @default(cuid())
+  adminId   String
+  admin     AdminUser @relation(fields: [adminId], references: [id], onDelete: Cascade)
+  tokenHash String    @unique
+  expiresAt DateTime
+  userAgent String?
+  ipAddress String?
+  createdAt DateTime  @default(now())
+
+  @@index([adminId])
+}
+
+// action examples: "admin_login" | "password_reset_sent" | "message_replied" |
+// "message_resolved" | "booking_status_changed" | "content_created" |
+// "content_updated" | "content_deleted" | "report_generated" | "admin_invited"
+model AuditLog {
+  id         String   @id @default(cuid())
+  adminId    String
+  admin      AdminUser @relation(fields: [adminId], references: [id], onDelete: Cascade)
+  action     String
+  targetType String?
+  targetId   String?
+  metadata   String?
+  createdAt  DateTime @default(now())
+
+  @@index([adminId])
+  @@index([action])
+}
+
+// ─── Content management (Testimonials & Events only — see Phase 3 plan for why) ─
+
+// segment: "member" | "corporate"
+model Testimonial {
+  id        String   @id @default(cuid())
+  quote     String
+  name      String
+  role      String
+  segment   String
+  rating    Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Event {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  cadence     String
+  nextDate    DateTime
+  category    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

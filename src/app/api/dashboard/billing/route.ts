@@ -1,0 +1,15 @@
+import { NextResponse } from "next/server";
+import { db } from "@/lib/db";
+import { getCurrentUser } from "@/lib/auth/session";
+
+export async function GET() {
+  const user = await getCurrentUser();
+  if (!user) return NextResponse.json({ ok: false, message: "Unauthorized" }, { status: 401 });
+
+  const invoices = await db.invoice.findMany({
+    where: { userId: user.id },
+    orderBy: { issuedAt: "desc" },
+  });
+
+  return NextResponse.json({ ok: true, invoices });
+}
