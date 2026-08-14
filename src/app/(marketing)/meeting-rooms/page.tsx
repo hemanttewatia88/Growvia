@@ -4,7 +4,8 @@ import { PageHero } from "@/components/sections/PageHero";
 import { Section } from "@/components/layout/Section";
 import { MeetingRoomBookingForm } from "@/components/forms/MeetingRoomBookingForm";
 import { CTABand } from "@/components/sections/CTABand";
-import { buildMetadata } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
 import { getRooms, getRoomBookingNotes, getImage } from "@/lib/content";
 
 export const metadata: Metadata = buildMetadata({
@@ -21,6 +22,7 @@ export default function MeetingRoomsPage() {
 
   return (
     <>
+      <JsonLd schema={breadcrumbSchema([{ name: "Home", path: "/" }, { name: "Meeting Rooms", path: "/meeting-rooms" }])} />
       <PageHero
         eyebrow="Meeting Rooms"
         title="Client-ready rooms, booked in minutes"

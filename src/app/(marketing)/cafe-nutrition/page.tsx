@@ -4,7 +4,8 @@ import { PageHero } from "@/components/sections/PageHero";
 import { Section } from "@/components/layout/Section";
 import { MenuHighlights } from "@/components/sections/MenuHighlights";
 import { CTABand } from "@/components/sections/CTABand";
-import { buildMetadata } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
 import { getMenu, getCafeHours } from "@/lib/content";
 
 export const metadata: Metadata = buildMetadata({
@@ -21,6 +22,9 @@ export default function CafeNutritionPage() {
 
   return (
     <>
+      <JsonLd
+        schema={breadcrumbSchema([{ name: "Home", path: "/" }, { name: "Café & Nutrition", path: "/cafe-nutrition" }])}
+      />
       <PageHero
         eyebrow="Café & Nutrition"
         title="Food that fits the way you train and work"
@@ -45,6 +49,19 @@ export default function CafeNutritionPage() {
       </Section>
 
       <Section tone="surface">
+        <div className="mx-auto max-w-2xl text-center">
+          <span className="text-xs font-semibold uppercase tracking-wide text-bronze">Sourcing</span>
+          <h2 className="mt-3 font-display text-3xl font-semibold text-ink">Built with a dietitian, not just a chef</h2>
+          <p className="mt-4 text-base leading-relaxed text-ink-secondary">
+            Every menu goes through a dietitian before it goes to the kitchen — portioned protein, complex carbs, and
+            recovery-friendly ingredients on the training-day options, alongside the coffee-shop staples people
+            actually order. Produce and dairy are sourced from local NCR vendors on a short supply chain, so the menu
+            changes with the season instead of running the same laminated card year-round.
+          </p>
+        </div>
+      </Section>
+
+      <Section tone="paper">
         <div className="mx-auto flex max-w-md flex-col items-center gap-4 rounded-2xl border border-border-brand bg-surface p-8 text-center">
           <Clock className="size-6 text-bronze" />
           <p className="font-display text-lg font-semibold text-ink">Café hours</p>

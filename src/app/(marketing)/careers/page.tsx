@@ -2,9 +2,11 @@ import type { Metadata } from "next";
 import { Briefcase } from "lucide-react";
 import { PageHero } from "@/components/sections/PageHero";
 import { Section } from "@/components/layout/Section";
+import { FeatureGrid } from "@/components/sections/FeatureGrid";
 import { CTABand } from "@/components/sections/CTABand";
-import { buildMetadata } from "@/lib/seo";
-import { getOpenRoles, getCultureStatement, getSiteInfo } from "@/lib/content";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { buildMetadata, breadcrumbSchema, jobPostingSchema } from "@/lib/seo";
+import { getOpenRoles, getCultureStatement, getCareerBenefits, getSiteInfo } from "@/lib/content";
 
 export const metadata: Metadata = buildMetadata({
   title: "Careers",
@@ -16,10 +18,15 @@ export const metadata: Metadata = buildMetadata({
 export default function CareersPage() {
   const roles = getOpenRoles();
   const culture = getCultureStatement();
+  const benefits = getCareerBenefits();
   const site = getSiteInfo();
 
   return (
     <>
+      {roles.map((role) => (
+        <JsonLd key={role.id} schema={jobPostingSchema(role)} />
+      ))}
+      <JsonLd schema={breadcrumbSchema([{ name: "Home", path: "/" }, { name: "Careers", path: "/careers" }])} />
       <PageHero
         eyebrow="Careers"
         title="Build the membership you'd actually use"
@@ -37,12 +44,22 @@ export default function CareersPage() {
 
       <Section tone="surface">
         <div className="mx-auto max-w-2xl text-center">
+          <span className="text-xs font-semibold uppercase tracking-wide text-bronze">Why join us</span>
+          <h2 className="mt-3 font-display text-3xl font-semibold text-ink">What you get, beyond a salary</h2>
+        </div>
+        <div className="mt-10">
+          <FeatureGrid columns={4} items={benefits} />
+        </div>
+      </Section>
+
+      <Section tone="paper">
+        <div className="mx-auto max-w-2xl text-center">
           <span className="text-xs font-semibold uppercase tracking-wide text-bronze">Open roles</span>
           <h2 className="mt-3 font-display text-3xl font-semibold text-ink">Current openings</h2>
         </div>
         <div className="mt-10 flex flex-col divide-y divide-border-brand rounded-2xl border border-border-brand bg-surface">
           {roles.map((role) => (
-            <div key={role.id} className="flex flex-col gap-2 p-6 sm:flex-row sm:items-center sm:justify-between">
+            <div key={role.id} className="flex flex-col gap-3 p-6 sm:flex-row sm:items-start sm:justify-between">
               <div className="flex items-start gap-3">
                 <Briefcase className="mt-1 size-5 shrink-0 text-bronze" />
                 <div>
@@ -50,6 +67,7 @@ export default function CareersPage() {
                   <p className="text-sm text-ink-secondary">
                     {role.department} · {role.location} · {role.type}
                   </p>
+                  <p className="mt-2 max-w-xl text-sm text-ink-secondary">{role.description}</p>
                 </div>
               </div>
               <a

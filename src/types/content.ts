@@ -95,6 +95,9 @@ export interface CareerRole {
   department: string;
   location: string;
   type: string;
+  description: string;
+  /** ISO date (YYYY-MM-DD) the role was posted — used for JobPosting structured data. */
+  postedAt: string;
 }
 
 export interface ImageAsset {

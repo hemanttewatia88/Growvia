@@ -6,12 +6,13 @@ import { MapEmbed } from "@/components/sections/MapEmbed";
 import { PlaceholderNotice } from "@/components/sections/PlaceholderNotice";
 import { CTABand } from "@/components/sections/CTABand";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { buildMetadata, localBusinessSchema } from "@/lib/seo";
+import { buildMetadata, localBusinessSchema, breadcrumbSchema } from "@/lib/seo";
 import { getSiteInfo } from "@/lib/content";
 
 export const metadata: Metadata = buildMetadata({
   title: "Locations",
-  description: "Visit GrowViaSphere in Gurugram, Delhi NCR — address, hours, and directions.",
+  description:
+    "Visit GrowViaSphere's flagship centre in Sector 44, Gurugram, Delhi NCR — address, hours, parking, and directions.",
   path: "/locations",
   imageKey: "locations-exterior",
 });
@@ -23,10 +24,11 @@ export default function LocationsPage() {
   return (
     <>
       <JsonLd schema={localBusinessSchema()} />
+      <JsonLd schema={breadcrumbSchema([{ name: "Home", path: "/" }, { name: "Locations", path: "/locations" }])} />
       <PageHero
         eyebrow="Locations"
-        title="Visit us in Gurugram"
-        subtitle="One address, four verticals — come see the space before you join."
+        title="Visit our flagship centre in Gurugram"
+        subtitle="One address, four verticals — come see the space before you join. It's the first of a planned network of GrowViaSphere centres across Delhi NCR."
         imageKey="locations-exterior"
       />
 
@@ -60,6 +62,29 @@ export default function LocationsPage() {
             <PlaceholderNotice>Placeholder address for demonstration — to be confirmed before launch.</PlaceholderNotice>
           </div>
           <MapEmbed query={fullAddress} title={`Map showing ${site.name} location`} />
+        </div>
+      </Section>
+
+      <Section tone="surface">
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-2">
+          <div>
+            <span className="text-xs font-semibold uppercase tracking-wide text-bronze">Getting here</span>
+            <h2 className="mt-3 font-display text-2xl font-semibold text-ink">By metro, car, or on foot</h2>
+            <p className="mt-4 text-base leading-relaxed text-ink-secondary">
+              The centre sits a short walk from the nearest Rapid Metro station, making it an easy add-on to a
+              commute rather than a detour from it. If you&apos;re driving in, on-site basement parking is available
+              for both members and guests — no need to circle the block or hunt for a paid lot nearby.
+            </p>
+          </div>
+          <div>
+            <span className="text-xs font-semibold uppercase tracking-wide text-bronze">More centres coming</span>
+            <h2 className="mt-3 font-display text-2xl font-semibold text-ink">Gurugram is the first, not the only</h2>
+            <p className="mt-4 text-base leading-relaxed text-ink-secondary">
+              This Sector 44 centre is GrowViaSphere&apos;s flagship — the model we&apos;re refining before expanding
+              to more addresses across Delhi NCR&apos;s other business hubs. Members who join early get first access
+              as new centres come online.
+            </p>
+          </div>
         </div>
       </Section>
 

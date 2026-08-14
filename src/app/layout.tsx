@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import { Bricolage_Grotesque, Inter } from "next/font/google";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import "./globals.css";
-import { SITE_URL, SITE_NAME } from "@/lib/seo";
+import { SITE_URL, SITE_NAME, organizationSchema } from "@/lib/seo";
 import { site } from "@/content/site";
+import { JsonLd } from "@/components/seo/JsonLd";
 
 const bricolage = Bricolage_Grotesque({
   variable: "--font-display-raw",
@@ -34,6 +35,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en-IN" className={`${bricolage.variable} ${inter.variable} h-full antialiased`}>
       <body className="min-h-full">
+        <JsonLd schema={organizationSchema()} />
         {children}
         {gaId && <GoogleAnalytics gaId={gaId} />}
       </body>

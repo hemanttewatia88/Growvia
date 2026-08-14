@@ -3,7 +3,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { PageHero } from "@/components/sections/PageHero";
 import { Section } from "@/components/layout/Section";
-import { buildMetadata } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
 import { getAllPosts, getImage } from "@/lib/content";
 
 export const metadata: Metadata = buildMetadata({
@@ -23,6 +24,7 @@ export default function BlogIndexPage() {
 
   return (
     <>
+      <JsonLd schema={breadcrumbSchema([{ name: "Home", path: "/" }, { name: "Blog & Insights", path: "/blog" }])} />
       <PageHero
         eyebrow="Blog & Insights"
         title="Ideas on fitness, hybrid work, and workplace wellness"

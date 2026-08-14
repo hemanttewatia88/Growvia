@@ -7,7 +7,8 @@ import { FeatureGrid } from "@/components/sections/FeatureGrid";
 import { TeamGrid } from "@/components/sections/TeamGrid";
 import { PlaceholderNotice } from "@/components/sections/PlaceholderNotice";
 import { CTABand } from "@/components/sections/CTABand";
-import { buildMetadata } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
 import { getVerticals, getLeadership, getImage } from "@/lib/content";
 
 export const metadata: Metadata = buildMetadata({
@@ -26,6 +27,7 @@ export default function AboutPage() {
 
   return (
     <>
+      <JsonLd schema={breadcrumbSchema([{ name: "Home", path: "/" }, { name: "About Us", path: "/about" }])} />
       <PageHero
         eyebrow="About Us"
         title="We built the membership we couldn't find"
@@ -107,8 +109,8 @@ export default function AboutPage() {
               },
               {
                 icon: Sparkles,
-                title: "Premium, used daily",
-                body: "Every space is built to be used every day by real members, not just to photograph well once.",
+                title: "Consistency over hype",
+                body: "Equipment gets maintained on schedule, rooms get reset between bookings, and the café menu doesn't quietly get worse six months after launch — the standard holds daily, not just on tour day.",
               },
             ]}
           />

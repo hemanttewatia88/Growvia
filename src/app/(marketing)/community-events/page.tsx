@@ -4,7 +4,8 @@ import { PageHero } from "@/components/sections/PageHero";
 import { Section } from "@/components/layout/Section";
 import { EventList } from "@/components/sections/EventList";
 import { CTABand } from "@/components/sections/CTABand";
-import { buildMetadata } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { buildMetadata, breadcrumbSchema, eventsSchema } from "@/lib/seo";
 import { getImage } from "@/lib/content";
 import { getEvents } from "@/lib/content-cms";
 
@@ -23,6 +24,10 @@ export default async function CommunityEventsPage() {
 
   return (
     <>
+      {events.length > 0 && <JsonLd schema={eventsSchema(events)} />}
+      <JsonLd
+        schema={breadcrumbSchema([{ name: "Home", path: "/" }, { name: "Community & Events", path: "/community-events" }])}
+      />
       <PageHero
         eyebrow="Community & Events"
         title="A membership, not just a facility"
@@ -32,6 +37,20 @@ export default async function CommunityEventsPage() {
 
       <Section tone="paper">
         <div className="mx-auto max-w-2xl text-center">
+          <span className="text-xs font-semibold uppercase tracking-wide text-bronze">Why it matters</span>
+          <h2 className="mt-3 font-display text-3xl font-semibold text-ink">Facilities create proximity. Events create relationships.</h2>
+          <p className="mt-4 text-base leading-relaxed text-ink-secondary">
+            Sharing a building doesn&apos;t automatically mean sharing a network — it just means being in the same place
+            at the same time. The events calendar is what turns that proximity into something useful: recurring
+            breakfasts where founders actually meet each other, wellness workshops run by the same coaches you train
+            with, and fitness challenges that turn solo workouts into a shared one. Every event is free for members
+            and runs on a predictable cadence, so it becomes a habit rather than a one-off.
+          </p>
+        </div>
+      </Section>
+
+      <Section tone="surface">
+        <div className="mx-auto max-w-2xl text-center">
           <span className="text-xs font-semibold uppercase tracking-wide text-bronze">Upcoming events</span>
           <h2 className="mt-3 font-display text-3xl font-semibold text-ink">What&apos;s on</h2>
         </div>
@@ -40,7 +59,7 @@ export default async function CommunityEventsPage() {
         </div>
       </Section>
 
-      <Section tone="surface">
+      <Section tone="paper">
         <div className="mx-auto max-w-2xl text-center">
           <span className="text-xs font-semibold uppercase tracking-wide text-bronze">Gallery</span>
           <h2 className="mt-3 font-display text-3xl font-semibold text-ink">Around the centre</h2>

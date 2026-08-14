@@ -4,7 +4,8 @@ import { PageHero } from "@/components/sections/PageHero";
 import { Section } from "@/components/layout/Section";
 import { ContactForm } from "@/components/forms/ContactForm";
 import { MapEmbed } from "@/components/sections/MapEmbed";
-import { buildMetadata } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
 import { getSiteInfo } from "@/lib/content";
 
 export const metadata: Metadata = buildMetadata({
@@ -20,6 +21,7 @@ export default function ContactPage() {
 
   return (
     <>
+      <JsonLd schema={breadcrumbSchema([{ name: "Home", path: "/" }, { name: "Contact Us", path: "/contact" }])} />
       <PageHero
         eyebrow="Contact Us"
         title="Let's talk"

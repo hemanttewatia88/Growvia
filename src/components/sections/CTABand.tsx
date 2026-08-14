@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/layout/Container";
+import { Reveal } from "@/components/layout/Reveal";
 import { cn } from "@/lib/utils";
 
 interface CtaAction {
@@ -30,35 +31,37 @@ export function CTABand({ title, body, primaryCta, secondaryCta, tone = "navy" }
         style={{ animationDuration: "4s" }}
       />
       <Container size="narrow" className="relative flex flex-col items-center gap-5 text-center">
-        <h2 className="font-display text-2xl font-semibold sm:text-3xl">{title}</h2>
-        {body && <p className={cn("max-w-xl text-sm sm:text-base", isGold ? "text-navy/80" : "text-ink-on-dark/80")}>{body}</p>}
-        <div className="mt-1 flex flex-wrap justify-center gap-3">
-          <Button
-            asChild
-            size="lg"
-            className={cn(
-              "rounded-full px-6 transition-transform hover:scale-105",
-              isGold && "bg-navy text-ink-on-dark hover:bg-navy/85",
-            )}
-          >
-            <Link href={primaryCta.href}>{primaryCta.label}</Link>
-          </Button>
-          {secondaryCta && (
+        <Reveal className="flex flex-col items-center gap-5">
+          <h2 className="font-display text-2xl font-semibold sm:text-3xl">{title}</h2>
+          {body && <p className={cn("max-w-xl text-sm sm:text-base", isGold ? "text-navy/80" : "text-ink-on-dark/80")}>{body}</p>}
+          <div className="mt-1 flex flex-wrap justify-center gap-3">
             <Button
               asChild
               size="lg"
-              variant="outline"
               className={cn(
                 "rounded-full px-6 transition-transform hover:scale-105",
-                isGold
-                  ? "border-navy/30 bg-transparent text-navy hover:bg-navy/10"
-                  : "border-white/30 bg-transparent text-ink-on-dark hover:bg-white/10 hover:text-ink-on-dark",
+                isGold && "bg-navy text-ink-on-dark hover:bg-navy/85",
               )}
             >
-              <Link href={secondaryCta.href}>{secondaryCta.label}</Link>
+              <Link href={primaryCta.href}>{primaryCta.label}</Link>
             </Button>
-          )}
-        </div>
+            {secondaryCta && (
+              <Button
+                asChild
+                size="lg"
+                variant="outline"
+                className={cn(
+                  "rounded-full px-6 transition-transform hover:scale-105",
+                  isGold
+                    ? "border-navy/30 bg-transparent text-navy hover:bg-navy/10"
+                    : "border-white/30 bg-transparent text-ink-on-dark hover:bg-white/10 hover:text-ink-on-dark",
+                )}
+              >
+                <Link href={secondaryCta.href}>{secondaryCta.label}</Link>
+              </Button>
+            )}
+          </div>
+        </Reveal>
       </Container>
     </section>
   );

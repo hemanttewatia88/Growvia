@@ -6,7 +6,8 @@ import { PricingCards } from "@/components/sections/PricingCards";
 import { ComparisonTable } from "@/components/sections/ComparisonTable";
 import { PlaceholderNotice } from "@/components/sections/PlaceholderNotice";
 import { CTABand } from "@/components/sections/CTABand";
-import { buildMetadata } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
 import { getTiers, getFeatureMatrix } from "@/lib/content";
 
 export const metadata: Metadata = buildMetadata({
@@ -23,6 +24,7 @@ export default function MembershipPage() {
 
   return (
     <>
+      <JsonLd schema={breadcrumbSchema([{ name: "Home", path: "/" }, { name: "Membership & Pricing", path: "/membership" }])} />
       <PageHero
         eyebrow="Membership & Pricing"
         title="One membership, five ways to use it"

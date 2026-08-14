@@ -64,4 +64,25 @@ export const faqs: FaqItem[] = [
     answer:
       "Yes — most corporate clients position it as a flexible wellness-and-workspace benefit that employees can use for fitness, focused work time, or client meetings, all under one company account.",
   },
+  {
+    id: "f10",
+    category: "Membership",
+    question: "Is there a day pass for people who aren't ready to join?",
+    answer:
+      "Yes — the Day Pass tier gives one-time access to the fitness floor, co-working desks, and café for a flat rate, so you can try the space before committing to a monthly plan. See the Membership & Pricing page for the current rate.",
+  },
+  {
+    id: "f11",
+    category: "Facilities",
+    question: "Is parking available on-site?",
+    answer:
+      "Yes — on-site basement parking is available for members and guests, and the centre is a short walk from the nearest metro station. Full directions are on the Locations page.",
+  },
+  {
+    id: "f12",
+    category: "Facilities",
+    question: "What are your operating hours?",
+    answer:
+      "The centre is open Monday–Friday, 6:00 AM–10:00 PM, and Saturday–Sunday, 7:00 AM–8:00 PM. Café hours run slightly shorter than facility hours — see the Café & Nutrition page for details.",
+  },
 ];

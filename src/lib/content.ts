@@ -15,7 +15,7 @@ import { menu, cafeHours } from "@/content/menu";
 import { rooms, roomBookingNotes } from "@/content/rooms";
 import { workspaceTypes, coworkingAmenities } from "@/content/coworking";
 import { classes, fitnessAssessment, personalTraining } from "@/content/classes";
-import { openRoles, cultureStatement } from "@/content/careers";
+import { openRoles, cultureStatement, careerBenefits } from "@/content/careers";
 import { images, getImage } from "@/content/images";
 import { getAllPosts as getAllPostsFromContent, getPostBySlug as getPostBySlugFromContent } from "@/content/blog/posts";
 
@@ -102,6 +102,10 @@ export function getOpenRoles() {
 
 export function getCultureStatement() {
   return cultureStatement;
+}
+
+export function getCareerBenefits() {
+  return careerBenefits;
 }
 
 export function getAllImages() {

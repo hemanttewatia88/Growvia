@@ -5,7 +5,8 @@ import { Section } from "@/components/layout/Section";
 import { FeatureGrid } from "@/components/sections/FeatureGrid";
 import { CorporateInquiryForm } from "@/components/forms/CorporateInquiryForm";
 import { CTABand } from "@/components/sections/CTABand";
-import { buildMetadata } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
 import { getTiers } from "@/lib/content";
 
 export const metadata: Metadata = buildMetadata({
@@ -21,6 +22,7 @@ export default function CorporatePage() {
 
   return (
     <>
+      <JsonLd schema={breadcrumbSchema([{ name: "Home", path: "/" }, { name: "Corporate Partnerships", path: "/corporate" }])} />
       <PageHero
         eyebrow="Corporate Partnerships"
         title="A wellness-and-workspace benefit your team will actually use"

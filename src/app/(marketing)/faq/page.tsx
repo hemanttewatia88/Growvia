@@ -4,7 +4,7 @@ import { Section } from "@/components/layout/Section";
 import { FaqAccordion } from "@/components/sections/FaqAccordion";
 import { CTABand } from "@/components/sections/CTABand";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { buildMetadata, faqPageSchema } from "@/lib/seo";
+import { buildMetadata, faqPageSchema, breadcrumbSchema } from "@/lib/seo";
 import { getFaqs, getFaqsByCategory } from "@/lib/content";
 
 export const metadata: Metadata = buildMetadata({
@@ -22,6 +22,7 @@ export default function FaqPage() {
   return (
     <>
       <JsonLd schema={faqPageSchema(faqs)} />
+      <JsonLd schema={breadcrumbSchema([{ name: "Home", path: "/" }, { name: "FAQ", path: "/faq" }])} />
       <PageHero
         eyebrow="FAQ"
         title="Questions, answered"

@@ -5,7 +5,7 @@ import { PageHero } from "@/components/sections/PageHero";
 import { Section } from "@/components/layout/Section";
 import { CTABand } from "@/components/sections/CTABand";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { buildMetadata, blogPostingSchema } from "@/lib/seo";
+import { buildMetadata, blogPostingSchema, breadcrumbSchema } from "@/lib/seo";
 import { getAllPosts, getPostBySlug, getImage } from "@/lib/content";
 import type { BlogBlock } from "@/types/content";
 
@@ -70,6 +70,13 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   return (
     <>
       <JsonLd schema={blogPostingSchema(post)} />
+      <JsonLd
+        schema={breadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "Blog & Insights", path: "/blog" },
+          { name: post.title, path: `/blog/${post.slug}` },
+        ])}
+      />
       <PageHero eyebrow={post.category} title={post.title} subtitle={post.description} imageKey={post.imageKey} />
 
       <Section tone="paper" containerSize="narrow">

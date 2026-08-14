@@ -5,7 +5,8 @@ import { PageHero } from "@/components/sections/PageHero";
 import { Section } from "@/components/layout/Section";
 import { FeatureGrid } from "@/components/sections/FeatureGrid";
 import { CTABand } from "@/components/sections/CTABand";
-import { buildMetadata } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
 import { getWorkspaceTypes, getCoworkingAmenities, getImage } from "@/lib/content";
 
 export const metadata: Metadata = buildMetadata({
@@ -23,6 +24,7 @@ export default function CoWorkingPage() {
 
   return (
     <>
+      <JsonLd schema={breadcrumbSchema([{ name: "Home", path: "/" }, { name: "Co-Working", path: "/co-working" }])} />
       <PageHero
         eyebrow="Co-Working"
         title="A desk that keeps up with your day"

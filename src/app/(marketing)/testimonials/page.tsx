@@ -5,7 +5,7 @@ import { Section } from "@/components/layout/Section";
 import { PlaceholderNotice } from "@/components/sections/PlaceholderNotice";
 import { CTABand } from "@/components/sections/CTABand";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { buildMetadata, aggregateRatingSchema } from "@/lib/seo";
+import { buildMetadata, aggregateRatingSchema, breadcrumbSchema } from "@/lib/seo";
 import { getTestimonials, getAggregateRating } from "@/lib/content-cms";
 
 export const metadata: Metadata = buildMetadata({
@@ -22,6 +22,7 @@ export default async function TestimonialsPage() {
   return (
     <>
       <JsonLd schema={aggregateRatingSchema(ratingValue, reviewCount)} />
+      <JsonLd schema={breadcrumbSchema([{ name: "Home", path: "/" }, { name: "Testimonials", path: "/testimonials" }])} />
       <PageHero
         eyebrow="Testimonials"
         title="What members and clients say"

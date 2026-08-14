@@ -6,7 +6,8 @@ import { FeatureGrid } from "@/components/sections/FeatureGrid";
 import { TeamGrid } from "@/components/sections/TeamGrid";
 import { PlaceholderNotice } from "@/components/sections/PlaceholderNotice";
 import { CTABand } from "@/components/sections/CTABand";
-import { buildMetadata } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
 import { getClasses, getTrainers, getFitnessAssessment, getPersonalTraining } from "@/lib/content";
 
 export const metadata: Metadata = buildMetadata({
@@ -25,6 +26,7 @@ export default function FitnessPage() {
 
   return (
     <>
+      <JsonLd schema={breadcrumbSchema([{ name: "Home", path: "/" }, { name: "Fitness", path: "/fitness" }])} />
       <PageHero
         eyebrow="Fitness"
         title="Train with intent, not just intensity"
