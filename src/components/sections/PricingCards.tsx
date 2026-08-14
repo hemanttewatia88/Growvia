@@ -2,14 +2,15 @@ import Link from "next/link";
 import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { Reveal } from "@/components/layout/Reveal";
 import type { MembershipTier } from "@/types/content";
 
 export function PricingCards({ tiers }: { tiers: MembershipTier[] }) {
   return (
     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {tiers.map((tier) => (
+      {tiers.map((tier, i) => (
+        <Reveal key={tier.id} delay={i * 80}>
         <div
-          key={tier.id}
           className={cn(
             "flex flex-col rounded-2xl border p-6 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl",
             tier.highlighted ? "border-gold bg-navy text-ink-on-dark shadow-lg" : "border-border-brand bg-surface text-ink",
@@ -52,6 +53,7 @@ export function PricingCards({ tiers }: { tiers: MembershipTier[] }) {
             <Link href={tier.ctaHref}>{tier.ctaLabel}</Link>
           </Button>
         </div>
+        </Reveal>
       ))}
     </div>
   );

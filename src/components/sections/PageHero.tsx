@@ -30,7 +30,7 @@ interface PageHeroProps {
   videos?: RotatingClip[];
 }
 
-const MEDIA_CLASSES = "motion-safe:animate-in motion-safe:fade-in motion-safe:zoom-in-95 h-full w-full object-cover opacity-40 duration-1000";
+const MEDIA_CLASSES = "motion-safe:animate-in motion-safe:fade-in motion-safe:zoom-in-95 h-full w-full object-cover opacity-90 duration-1000";
 
 export function PageHero({ eyebrow, title, subtitle, imageKey, primaryCta, secondaryCta, variant = "inner", video, videos }: PageHeroProps) {
   const image = getImage(imageKey);
@@ -45,7 +45,7 @@ export function PageHero({ eyebrow, title, subtitle, imageKey, primaryCta, secon
       ) : (
         <Image src={image.src} alt={image.alt} fill priority sizes="100vw" className={MEDIA_CLASSES} />
       )}
-      <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/85 to-navy/55" />
+      <div className="absolute inset-0 bg-gradient-to-t from-navy/95 via-navy/45 to-navy/15" />
       <Container className={cn("relative", isHome ? "py-28 sm:py-36" : "py-20 sm:py-28")}>
         <div className={cn("flex flex-col gap-5", isHome ? "max-w-2xl" : "max-w-2xl")}>
           {eyebrow && (

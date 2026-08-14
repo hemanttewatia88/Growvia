@@ -2,16 +2,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { getImage } from "@/lib/content";
+import { Reveal } from "@/components/layout/Reveal";
 import type { Vertical } from "@/types/content";
 
 export function VerticalOverview({ verticals }: { verticals: Vertical[] }) {
   return (
     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-      {verticals.map((vertical) => {
+      {verticals.map((vertical, i) => {
         const image = getImage(vertical.imageKey);
         return (
+          <Reveal key={vertical.id} delay={i * 80}>
           <Link
-            key={vertical.id}
             href={vertical.href}
             className="group relative overflow-hidden rounded-2xl border border-border-brand bg-surface transition-all duration-300 hover:-translate-y-1 hover:border-gold/40 hover:shadow-xl"
           >
@@ -41,6 +42,7 @@ export function VerticalOverview({ verticals }: { verticals: Vertical[] }) {
               </ul>
             </div>
           </Link>
+          </Reveal>
         );
       })}
     </div>

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Reveal } from "@/components/layout/Reveal";
 
 export interface FeatureGridItem {
   icon?: LucideIcon;
@@ -23,12 +24,12 @@ const COLUMN_CLASSES: Record<NonNullable<FeatureGridProps["columns"]>, string> =
 export function FeatureGrid({ items, columns = 3 }: FeatureGridProps) {
   return (
     <div className={cn("grid grid-cols-1 gap-5", COLUMN_CLASSES[columns])}>
-      {items.map((item) => {
+      {items.map((item, i) => {
         const Icon = item.icon;
         const content = (
           <>
             {Icon && (
-              <span className="flex size-10 items-center justify-center rounded-full bg-gold/15 text-bronze">
+              <span className="flex size-10 items-center justify-center rounded-full bg-gold/15 text-bronze transition-transform duration-300 group-hover:scale-110">
                 <Icon className="size-5" />
               </span>
             )}
@@ -39,23 +40,23 @@ export function FeatureGrid({ items, columns = 3 }: FeatureGridProps) {
 
         if (item.href) {
           return (
-            <Link
-              key={item.title}
-              href={item.href}
-              className="rounded-2xl border border-border-brand bg-surface p-6 transition-all duration-300 hover:-translate-y-1 hover:border-gold/50 hover:shadow-lg"
-            >
-              {content}
-            </Link>
+            <Reveal key={item.title} delay={i * 80}>
+              <Link
+                href={item.href}
+                className="group block rounded-2xl border border-border-brand bg-surface p-6 transition-all duration-300 hover:-translate-y-1 hover:border-gold/50 hover:shadow-lg"
+              >
+                {content}
+              </Link>
+            </Reveal>
           );
         }
 
         return (
-          <div
-            key={item.title}
-            className="rounded-2xl border border-border-brand bg-surface p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
-          >
-            {content}
-          </div>
+          <Reveal key={item.title} delay={i * 80}>
+            <div className="group rounded-2xl border border-border-brand bg-surface p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+              {content}
+            </div>
+          </Reveal>
         );
       })}
     </div>
